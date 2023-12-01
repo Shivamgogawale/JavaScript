@@ -8,29 +8,44 @@
     <body>
         <div class="quote-box">
             <h2>Quoate of the Day</h2>
-            <blockquote id="quote">
-            </blockquote>
-            <span id="author"></span>
+            <blockquote id="quotebox"></blockquote>
+            <span id="authorbox"></span>
             <div>
-                <button>New Quoate</button>
-                <button><img src="twitter.png">Tweet</button>
+                <button onclick="getQuaote(apiUrl)">New Quoate</button>
+                <button onclick="postTweet()"><img src="twitter.png">Tweet</button>
             </div>
         </div>
         <script>
-            document.addEventListener("DOMContentLoaded",function(){
-            const quote=document.getElementById("quote");
-            const author=document.getElementById("author");
+            let quoteElement=document.getElementById("quotebox");
+            let authorElement=document.getElementById("authorbox");
             const apiUrl="https://api.quotable.io/quotes/random";
 
             async function getQuaote(url){
                 const response = await fetch(url);
                 var res=await response.json();
-                console.log(res);
-                quote.innerHTML = res.content;
-                author.innerHTML = res.author;
+                const data=res[0];
+                console.log(data);
+                if ('content' in data && 'author' in data) {
+                const quoteContent = data.content;
+                const authorName = data.author;
+
+                // Update HTML elements with retrieved values
+                quoteElement.innerText = quoteContent;
+                authorElement.innerText = authorName;
+
+                // Log the values
+                console.log("Quote Content:", quoteContent);
+                console.log("Author Name:", authorName);
+            } else {
+                console.error("Expected properties not found in the API response.");
+            }
             }
             getQuaote(apiUrl);
-        });
+            function postTweet()
+            {
+                window.open("https://twitter.com/intent/tweet?text=Hello%20world");
+            }
+        
         </script>
         
     </body>
